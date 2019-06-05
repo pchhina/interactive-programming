@@ -7,11 +7,17 @@ root.title("Guess the Number")
 # define globals
 var = tk.StringVar()
 result = tk.StringVar()
-actual = random.randint(1,100)
-ntry = 7
 trials = tk.StringVar()
 
 # ----Helper Functions----
+def new_game():
+    """Initializes global variables."""
+    global ntry, actual
+    actual = random.randint(1,100)
+    ntry = 7
+    msg = "You have {0} trials remaining".format(ntry)
+    trials.set(msg)
+
 def set_message(event):
     """Updates the message with new text in entry field."""
     guess = entry_question.get()
@@ -22,6 +28,7 @@ def set_message(event):
 def check_guess(event):
     """Compares user's guess with actual number and updates the results
     message."""
+    global ntry
     guess = int(entry_question.get())
     if guess > actual:
         result.set("Actual number is smaller")
@@ -29,14 +36,21 @@ def check_guess(event):
         result.set("Actual number is larger")
     else:
         result.set("You guessed it correct!")
-    set_trials_message()
-    
-def set_trials_message():
-    """Updates the message with number of trials remaining"""
-    global ntry
     ntry -= 1
-    msg = "You have {0} trials remainng".format(ntry)
-    trials.set(msg)
+    in_play()
+    
+def in_play():
+    """Check if the game is in play and sets the message and entry state."""
+    if ntry < 1:
+        msg = "Please reset to play again"
+        trials.set(msg)
+        entry_question.config(state = 'disabled')
+        return False
+    else:
+        msg = "You have {0} trials remaining".format(ntry)
+        trials.set(msg)
+        return True
+
 
 # ----UI----
 
@@ -63,5 +77,7 @@ label_trials.grid(row = 5, column = 0, pady = 5, columnspan = 2)
 # this allows multiple handlers to bind to single event
 root.bind("<Return>", set_message, add = "+") 
 root.bind("<Return>", check_guess, add = "+")
+
+new_game()
 
 root.mainloop()
