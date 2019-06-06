@@ -37,6 +37,9 @@ def check_guess(event):
         result.set("Actual number is larger")
     else:
         result.set("You guessed it correct!")
+        trials.set("Please reset to play again")
+        entry_question.config(state = 'disabled')
+        return
     ntry -= 1
     in_play()
     
@@ -76,6 +79,7 @@ label_question = tk.Label(root, text = "Enter your guess")
 label_question.grid(row = 10, column = 0, padx = 10, pady = 20)
 
 entry_question = tk.Entry(root)
+entry_question.focus_force()
 entry_question.grid(row = 10, column = 1, padx = 10)
 
 label_guess = tk.Label(root, textvariable = var)
