@@ -45,6 +45,8 @@ def in_play():
     if ntry < 1:
         msg = "Please reset to play again"
         trials.set(msg)
+        result.set("")
+        var.set("")
         entry_question.config(state = 'disabled')
         return False
     else:
