@@ -82,6 +82,12 @@ entry_question = tk.Entry(root)
 entry_question.focus_force()
 entry_question.grid(row = 10, column = 1, padx = 10)
 
+label_range = tk.Label(root, text = "Range:", fg = "#6e6e6e")
+label_range.grid(row = 11, column = 0, sticky = tk.E, padx = 10)
+
+label_range0 = tk.Label(root, text = "[0 - 100]", fg = "#6e6e6e")
+label_range0.grid(row = 11, column = 1, sticky = tk.W, padx = 6)
+
 label_guess = tk.Label(root, textvariable = var)
 label_guess.grid(row = 30, column = 0, pady = 5, columnspan = 2)
 
