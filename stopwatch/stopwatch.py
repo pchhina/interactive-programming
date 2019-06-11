@@ -11,12 +11,24 @@ start = 0
 
 
 # ---- Define helper functions ----
+def format_start(start):
+    tenth_of_seconds = int(start * 10)
+    minutes = tenth_of_seconds // 600
+    tenth_of_seconds = tenth_of_seconds % 600
+    if tenth_of_seconds < 100:
+        tens_place = 0
+    else:
+        tens_place = ""
+    seconds = tenth_of_seconds / 10
+    formatted_time = "{0}:{1}{2}".format(minutes, tens_place, seconds)
+    return formatted_time
+    
 
 def timer():
     global start
     while(is_running):
         time.sleep(0.1)
-        print(start)
+        print(format_start(start))
         start += 0.1
         start = round(start, 1)
 
