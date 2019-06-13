@@ -7,6 +7,7 @@ root = tk.Tk()
 root.title("Stopwatch")
 
 # ---- Define globals ---
+
 is_running = False 
 start = 0
 counter = tk.StringVar()
@@ -18,7 +19,10 @@ game_mode = tk.IntVar()
 
 
 # ---- Define helper functions ----
+
 def format_start(start):
+    """Takes time in seconds with one decimal precision and 
+    formats it to minute:second.milliseconds format"""
     tenth_of_seconds = int(start * 10)
     minutes = tenth_of_seconds // 600
     tenth_of_seconds = tenth_of_seconds % 600
@@ -35,6 +39,8 @@ def format_score():
     return score_disp
 
 def timer():
+    """If the stopwatch is running, updates the time in 0.1 second
+    interval and updates the label"""
     global start, counter
     while(is_running):
         counter.set(format_start(start))
@@ -43,6 +49,8 @@ def timer():
         start = round(start, 1)
 
 def timer_reset():
+    """Event handler for reset button. Resets value of score and time.
+    Updates labels for score and time."""
     global is_running, start, counter, ntry, score
     is_running = False
     start = ntry = score = 0
@@ -50,6 +58,9 @@ def timer_reset():
     score_display.set(format_score())
 
 def timer_stop():
+    """Event handler for stop button. Updates score(number of times
+    a player stops at exact second) and ntry(total number of times
+    a player hits stop)."""
     global is_running, ntry, score
     is_running = False
     ntry += 1
@@ -58,17 +69,22 @@ def timer_stop():
     score_display.set(format_score())
 
 def timer_start():
+    """Event handler for start. Fires the timer function in a separate
+    thread to avoid locking up the UI."""
     global is_running
     is_running = True
     x = threading.Thread(target = timer)
     x.start()
 
 def toggle_game_mode():
+    """Event handler for game mode checkbox. Hides the score label when
+    turned off, calls the reset function each time it is toggled."""
     if game_mode.get() == 1:
         score_label.grid(row = 2, column = 2, sticky = tk.W)
     else:
         score_label.grid_forget()
     timer_reset()
+
 # ---- GUI ----
 
 start_button = tk.Button(root, text = "Start", command = timer_start,
