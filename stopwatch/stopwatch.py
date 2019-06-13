@@ -4,7 +4,6 @@ from tkinter import font
 import threading
 
 root = tk.Tk()
-root.geometry("450x400")
 root.title("Stopwatch")
 
 # ---- Define globals ---
@@ -15,6 +14,7 @@ fontstyle = font.Font(size = 24)
 score = 0
 ntry = 0
 score_display = tk.StringVar()
+game_mode = tk.IntVar()
 
 
 # ---- Define helper functions ----
@@ -63,27 +63,37 @@ def timer_start():
     x = threading.Thread(target = timer)
     x.start()
 
+def toggle_game_mode():
+    if game_mode.get() == 1:
+        score_label.grid(row = 2, column = 2, sticky = tk.W)
+    else:
+        score_label.grid_forget()
+    timer_reset()
 # ---- GUI ----
 
 start_button = tk.Button(root, text = "Start", command = timer_start,
-        bg = "#127c34", fg = "#f7f6dc", font = fontstyle)
-start_button.grid(row = 0, column = 0, pady = 25)
+        bg = "#127c34", fg = "#f7f6dc", font = fontstyle, width = 4)
+start_button.grid(row = 0, column = 0, sticky = tk.W, pady = 10, padx = 5)
 
 stop_button = tk.Button(root, text = "Stop", command = timer_stop,
-        bg = "#961515", fg = "#f7f6dc", font = fontstyle)
-stop_button.grid(row = 0, column = 1, pady = 25)
+        bg = "#961515", fg = "#f7f6dc", font = fontstyle, width = 4)
+stop_button.grid(row = 0, column = 1, sticky = tk.W, pady = 10, padx = 5)
 
 reset_button = tk.Button(root, text = "Reset", command = timer_reset,
-        bg = "#1d3557", fg = "#f7f6dc", font = fontstyle)
-reset_button.grid(row = 0, column = 2, pady = 25)
+        bg = "#1d3557", fg = "#f7f6dc", font = fontstyle, width = 4)
+reset_button.grid(row = 0, column = 2, sticky = tk.W, pady = 10, padx = 5)
 
-counter_label = tk.Label(root, textvariable = counter, bg = "#2c302e",
-        fg = "#f7f6dc", font = ("default", 60), height = 2, width = 8)
-counter_label.grid(row = 1, columnspan = 3, pady = 20, padx = 20)
+counter_label = tk.Label(root, textvariable = counter, fg = "#2c302e",
+        font = ("default", 60), height = 1, width = 7)
+counter_label.grid(row = 1, columnspan = 3, pady = 20)
 
 score_label = tk.Label(root, textvariable = score_display, fg = "#2c302e",
-        font = ("default", 20))
-score_label.grid(row = 2, column = 2, pady = 10, padx = 10)
+        font = ("default", 16))
+
+score_toggle = tk.Checkbutton(root, text = "Game Mode", variable = game_mode,
+        command = toggle_game_mode, font = ("default", 14))
+score_toggle.grid(row = 2, column = 0, columnspan = 2, sticky = tk.W, pady = 10
+    )
 
 timer_reset()
 
