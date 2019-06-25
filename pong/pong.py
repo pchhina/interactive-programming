@@ -5,12 +5,25 @@ root = tk.Tk()
 root.title("Pong")
 
 # First foray into classes
+class Paddle:
+    """paddle for the pong game"""
+    WIDTH = 20
+    HEIGHT = 90
+
+    def __init__(self, canvas, x0, y0, color):
+        self.paddle = canvas.create_rectangle(x0, y0, x0 + Paddle.WIDTH,
+                y0 + Paddle.HEIGHT, fill = color)
+
 class Pong:
     def __init__(self, master):
         self.width = 1000
         self.height = 800
         self.window = tk.Canvas(master, width = self.width, height = self.height)
         self.window.grid()
+
+        # draw paddles
+        left_paddle = Paddle(self.window, 0, 0, "red")
+        right_paddle = Paddle(self.window, self.width - Paddle.WIDTH, 0, "blue")
 
         # draw ball at the center of the canvas
         center = [self.width / 2, self.height / 2]
