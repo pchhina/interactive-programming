@@ -22,17 +22,22 @@ class Pong:
         self.ball = self.window.create_oval(x0, y0, x1, y1)
 
         # initialize velocity
-        self.v = 10
+        self.v = [1, 1]
         
     def velocity(self, pos):
         if pos[2] > self.width or pos[0] < 0:
-            self.v *= -1
+            self.v[0] *= -1
+        if pos[3] > self.height or pos[1] < 0:
+            self.v[1] *= -1
+        print(self.v)
         return self.v
 
     def move_ball(self):
         while True:
             pos = self.window.coords(self.ball)
-            self.window.move(self.ball, self.velocity(pos), 0)
+            ball_speed = self.velocity(pos)
+            self.window.move(self.ball, ball_speed[0], ball_speed[1])
+            print(pos)
             time.sleep(0.02)
             root.update()
 
