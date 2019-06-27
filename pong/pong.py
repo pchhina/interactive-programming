@@ -4,8 +4,10 @@ import time
 root = tk.Tk()
 root.title("Pong")
 
-# First foray into classes
 class Pong:
+    """Represents the game of pong.
+
+    """
     def __init__(self, master):
         self.width = 1000
         self.height = 800
@@ -15,6 +17,9 @@ class Pong:
         self.paddleheight = 100
         self.left_padpos = 0
         self.right_padpos = 980
+        self.v = [1, 1] # initial ball velocity
+        self.left_score = 0
+        self.right_score = 0
 
         # draw paddles
         self.left_paddle = self.window.create_rectangle(self.left_padpos,
@@ -30,6 +35,7 @@ class Pong:
 
 
         # draw ball at the center of the canvas
+    def spawn_ball(self):
         center = [self.width / 2, self.height / 2]
         radius = 50
         x0 = center[0] - radius
@@ -38,13 +44,27 @@ class Pong:
         y1 = center[1] + radius
         self.ball = self.window.create_oval(x0, y0, x1, y1)
 
-        # initialize velocity
-        self.v = [1, 1]
-
-        
     def velocity(self, pos):
-        if pos[2] > self.width or pos[0] < 0:
-            self.v[0] *= -1
+        pos_left = self.window.coords(self.left_paddle)
+        pos_right = self.window.coords(self.right_paddle)
+        pos_ballcenter = (pos[1] + pos[3]) / 2
+        if pos[2] > self.width - self.paddlewidth:
+            if pos_right[1] < pos_ballcenter < pos_right[3]:
+                self.v[0] *= -1
+            else:
+                self.window.delete(self.ball)
+                self.spawn_ball()
+                self.left_score += 1
+                print(self.left_score, self.right_score)
+        if pos[0] < self.paddlewidth:
+            if pos_left[1] < pos_ballcenter < pos_left[3]:
+                self.v[0] *= -1
+            else:
+                self.window.delete(self.ball)
+                self.spawn_ball()
+                self.right_score += 1
+                print(self.left_score, self.right_score)
+
         if pos[3] > self.height or pos[1] < 0:
             self.v[1] *= -1
         return self.v
@@ -72,4 +92,5 @@ class Pong:
 
 pong = Pong(root)
 root.bind("<Key>", pong.move_paddle)
+pong.spawn_ball()
 pong.move_ball()
