@@ -26,16 +26,26 @@ class Pong:
                 self.left_padpos,
                 self.left_padpos + self.paddlewidth,
                 self.left_padpos + self.paddleheight,
-                fill = "red")
+                fill = "#CBAB27")
         self.right_paddle = self.window.create_rectangle(self.right_padpos,
                 0,
                 self.right_padpos + self.paddlewidth,
                 self.paddleheight,
-                fill = "blue")
+                fill = "#209178")
+
+        # score labels
+        self.left_score_label = self.window.create_text(400, 50, 
+                font = ("default", 60), fill = "#8f8e8f",
+                text = self.left_score)
+        self.right_score_label = self.window.create_text(600, 50, 
+                font = ("default", 60), fill = "#8f8e8f",
+                text = self.right_score)
+    
 
 
         # draw ball at the center of the canvas
     def spawn_ball(self):
+        self.v = [1, 1] # initial ball velocity
         center = [self.width / 2, self.height / 2]
         radius = 50
         x0 = center[0] - radius
@@ -50,7 +60,7 @@ class Pong:
         pos_ballcenter = (pos[1] + pos[3]) / 2
         if pos[2] > self.width - self.paddlewidth:
             if pos_right[1] < pos_ballcenter < pos_right[3]:
-                self.v[0] *= -1
+                self.v[0] *= -1.1
             else:
                 self.window.delete(self.ball)
                 self.spawn_ball()
@@ -58,7 +68,7 @@ class Pong:
                 print(self.left_score, self.right_score)
         if pos[0] < self.paddlewidth:
             if pos_left[1] < pos_ballcenter < pos_left[3]:
-                self.v[0] *= -1
+                self.v[0] *= -1.1
             else:
                 self.window.delete(self.ball)
                 self.spawn_ball()
@@ -74,6 +84,10 @@ class Pong:
             pos = self.window.coords(self.ball)
             ball_speed = self.velocity(pos)
             self.window.move(self.ball, ball_speed[0], ball_speed[1])
+            self.window.itemconfigure(self.left_score_label, text =
+                    self.left_score)
+            self.window.itemconfigure(self.right_score_label, text =
+                    self.right_score)
             time.sleep(0.02)
             root.update()
 
