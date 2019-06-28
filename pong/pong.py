@@ -14,12 +14,16 @@ class Pong:
         self.window = tk.Canvas(master, width = self.width, height = self.height)
         self.window.grid()
         self.paddlewidth = 20
-        self.paddleheight = 100
+        self.paddleheight = 150
         self.left_padpos = 0
         self.right_padpos = 980
         self.v = [1, 1] # initial ball velocity
         self.left_score = 0
         self.right_score = 0
+
+        # draw gutters
+        self.window.create_line(20, 0, 20, 800, fill = "#8F8E8F")
+        self.window.create_line(980, 0, 980, 800, fill = "#8F8E8F")
 
         # draw paddles
         self.left_paddle = self.window.create_rectangle(self.left_padpos,
@@ -52,7 +56,8 @@ class Pong:
         y0 = center[1] - radius
         x1 = center[0] + radius
         y1 = center[1] + radius
-        self.ball = self.window.create_oval(x0, y0, x1, y1)
+        self.ball = self.window.create_oval(x0, y0, x1, y1, fill = "#D73E44",
+                outline = "#9D2E3E")
 
     def velocity(self, pos):
         pos_left = self.window.coords(self.left_paddle)
@@ -65,7 +70,6 @@ class Pong:
                 self.window.delete(self.ball)
                 self.spawn_ball()
                 self.left_score += 1
-                print(self.left_score, self.right_score)
         if pos[0] < self.paddlewidth:
             if pos_left[1] < pos_ballcenter < pos_left[3]:
                 self.v[0] *= -1.1
@@ -73,7 +77,6 @@ class Pong:
                 self.window.delete(self.ball)
                 self.spawn_ball()
                 self.right_score += 1
-                print(self.left_score, self.right_score)
 
         if pos[3] > self.height or pos[1] < 0:
             self.v[1] *= -1
