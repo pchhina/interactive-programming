@@ -1,5 +1,6 @@
 import tkinter as tk
 import time
+import random
 
 root = tk.Tk()
 root.title("Pong")
@@ -17,9 +18,12 @@ class Pong:
         self.paddleheight = 150
         self.left_padpos = 0
         self.right_padpos = 980
-        self.v = [1, 1] # initial ball velocity
         self.left_score = 0
         self.right_score = 0
+
+        # initial velocity
+        self.vel_choice = [-1.25, -1.00, -0.75, 0.75, 1.00, 1.25]
+        self.v = [random.choice(self.vel_choice), random.choice(self.vel_choice)]
 
         # draw gutters
         self.window.create_line(20, 0, 20, 800, fill = "#8F8E8F")
@@ -44,12 +48,17 @@ class Pong:
         self.right_score_label = self.window.create_text(600, 50, 
                 font = ("default", 60), fill = "#8f8e8f",
                 text = self.right_score)
+        self.window.create_line(500, 20, 500, 80, fill = "#8F8E8F")
+        self.window.create_text(100, 50, text = "d: move up", fill = "grey")
+        self.window.create_text(100, 750, text = "f: move down", fill = "grey")
+        self.window.create_text(900, 50, text = "k: move up", fill = "grey")
+        self.window.create_text(900, 750, text = "j: move down", fill = "grey")
     
 
 
         # draw ball at the center of the canvas
     def spawn_ball(self):
-        self.v = [1, 1] # initial ball velocity
+        self.v = [random.choice(self.vel_choice), random.choice(self.vel_choice)]
         center = [self.width / 2, self.height / 2]
         radius = 50
         x0 = center[0] - radius
