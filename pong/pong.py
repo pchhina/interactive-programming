@@ -49,15 +49,17 @@ class Pong:
                 font = ("default", 60), fill = "#8f8e8f",
                 text = self.right_score)
         self.window.create_line(500, 20, 500, 80, fill = "#8F8E8F")
+
+        # keyboard help labels
         self.window.create_text(100, 50, text = "d: move up", fill = "grey")
         self.window.create_text(100, 750, text = "f: move down", fill = "grey")
         self.window.create_text(900, 50, text = "k: move up", fill = "grey")
         self.window.create_text(900, 750, text = "j: move down", fill = "grey")
     
-
-
-        # draw ball at the center of the canvas
     def spawn_ball(self):
+        """spawns a ball at the center of canvas with a random direction
+        and velocity."""
+
         self.v = [random.choice(self.vel_choice), random.choice(self.vel_choice)]
         center = [self.width / 2, self.height / 2]
         radius = 50
@@ -69,6 +71,11 @@ class Pong:
                 outline = "#9D2E3E")
 
     def velocity(self, pos):
+        """sets the velocity vector to make the ball bounce off the top and 
+        bottom edge as well as the paddle. Velocity is increased by 10% if the
+        ball bounces off the paddles. If the ball touches gutter instead of
+        paddle, scores are updated and the ball is respawned."""
+
         pos_left = self.window.coords(self.left_paddle)
         pos_right = self.window.coords(self.right_paddle)
         pos_ballcenter = (pos[1] + pos[3]) / 2
@@ -92,6 +99,9 @@ class Pong:
         return self.v
 
     def move_ball(self):
+        """ball is moved across the canvas every 0.02 seconds.
+        """
+        
         while True:
             pos = self.window.coords(self.ball)
             ball_speed = self.velocity(pos)
@@ -104,6 +114,9 @@ class Pong:
             root.update()
 
     def move_paddle(self, event):
+        """paddle is moved by listening to the keyboard event.
+        """
+
         pos_left = self.window.coords(self.left_paddle)
         pos_right = self.window.coords(self.right_paddle)
         if event.char == "f" and pos_left[3] < self.height:
